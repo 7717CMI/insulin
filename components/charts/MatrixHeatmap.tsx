@@ -25,7 +25,7 @@ export function MatrixHeatmap({ title, height = 600 }: MatrixHeatmapProps) {
     const filtered = filterData(dataset, filters)
 
     // Check if we need Global-to-regional mapping
-    const regionalGeographies = ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East', 'Africa', 'Middle East & Africa', 'ASEAN', 'SAARC Region', 'CIS Region']
+    const regionalGeographies = ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East', 'Africa', 'ASEAN', 'SAARC Region', 'CIS Region']
     const hasRegionalSelection = filters.geographies.some(g => regionalGeographies.includes(g))
     const hasOnlyGlobalRecords = filtered.every(r => r.geography === 'Global')
     const needsGlobalMapping = hasRegionalSelection && hasOnlyGlobalRecords && !filters.geographies.includes('Global')
@@ -73,7 +73,6 @@ export function MatrixHeatmap({ title, height = 600 }: MatrixHeatmapProps) {
       'Latin America': 0.08,
       'Middle East': 0.04,
       'Africa': 0.03,
-      'Middle East & Africa': 0.07,
       'ASEAN': 0.10,
       'SAARC Region': 0.08,
       'CIS Region': 0.05

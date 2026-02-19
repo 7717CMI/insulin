@@ -7,44 +7,41 @@
         "Pre-filled syringes & pen injectors": {},
         "Sterile injectables": {},
         "Topical/Transdermal patches": {},
-        "Others (Microelectronic delivery devices & Others)": {}
+        "Other Drug-Device Combination Products": {}
       },
       "Medical Devices": {
         "Surgical instruments": {},
         "Orthopedic implants & prosthetics": {},
-        "Dental devices": {},
-        "Others (Cardiovascular devices)": {}
+        "Cardiovascular Devices": {},
+        "Respiratory Care Devices": {},
+        "Other Medical Devices": {}
       },
-      "Diagnostics & Laboratory": {
-        "Devices/Equipment": {
-          "Imaging devices (MRI, CT components, ultrasound systems)": {},
-          "In-vitro diagnostic (IVD) kits": {},
-          "Point-of-care diagnostic devices": {},
-          "Molecular diagnostics devices (PCR, NGS systems)": {},
-          "Others (Point-of-care devices & Others)": {}
-        },
-        "Others (Monitoring & Digital Health Devices)": {}
-      }
+      "Diagnostics & Laboratory Devices/Equipment": {
+        "Imaging devices": {},
+        "In-vitro diagnostic (IVD) kits": {},
+        "Point-of-care diagnostic devices": {},
+        "Molecular diagnostics devices": {},
+        "Other Diagnostics & Laboratory Devices/Equipment": {}
+      },
+      "Other Product / Device Types": {}
     },
     "By Service Type": {
       "Design & Development & Engineering Services": {},
       "Contract manufacturing": {},
       "Supply Chain Management": {},
       "Quality & Regulations": {},
-      "Digital & Data Services": {},
       "Other Value-Added Services": {}
     },
     "By Device Class": {
       "Class I": {},
       "Class II": {},
-      "Class III": {},
-      "Others": {}
+      "Class III": {}
     },
     "By Client / End-User": {
       "Pharmaceutical companies": {},
       "Biopharmaceutical & Biotech companies": {},
       "Medical Device Companies": {},
-      "Others (Academic/Research Institutions)": {}
+      "Other Client / End-Users": {}
     },
     "By Region": {
       "North America": {
@@ -52,33 +49,38 @@
         "Canada": {}
       },
       "Europe": {
-        "Germany": {},
         "U.K.": {},
-        "Italy": {},
+        "Germany": {},
         "France": {},
+        "Italy": {},
         "Spain": {},
         "Russia": {},
         "Rest of Europe": {}
       },
       "Asia Pacific": {
         "China": {},
-        "Japan": {},
         "India": {},
+        "Japan": {},
         "South Korea": {},
         "ASEAN": {},
         "Australia": {},
         "Rest of Asia Pacific": {}
       },
-      "Middle East & Africa": {
-        "GCC": {},
-        "South Africa": {},
-        "Rest of Middle East & Africa": {}
-      },
       "Latin America": {
         "Brazil": {},
-        "Argentina": {},
         "Mexico": {},
+        "Argentina": {},
         "Rest of Latin America": {}
+      },
+      "Middle East": {
+        "GCC": {},
+        "Israel": {},
+        "Rest of Middle East": {}
+      },
+      "Africa": {
+        "North Africa": {},
+        "Central Africa": {},
+        "South Africa": {}
       }
     }
   }
