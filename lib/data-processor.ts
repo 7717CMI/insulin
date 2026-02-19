@@ -300,16 +300,13 @@ export function filterData(
       // When a specific level is selected, we need to include records that have data at that level
       const recordLevel = record.aggregation_level
 
-      // For Level 2 (first segment level like Parenteral, Oral, etc.):
-      // - Include aggregated records at level 2 (if they exist)
-      // - Also include leaf records that have a level_1 hierarchy value (to aggregate later)
+      // For Level 2 (first segment level like Drug-Device, Medical Devices, etc.):
+      // ONLY include records at level 2. Do NOT also include leaf children,
+      // because parent nodes already contain the correct aggregated totals.
+      // Children (level 3+) are only needed when user explicitly drills down.
       if (effectiveAggregationLevel === 2) {
-        // Include records at level 2 (aggregated parent segments)
         if (recordLevel === 2) {
-          // Allow aggregated record at level 2
-        } else if (record.segment_hierarchy?.level_1 && record.segment_hierarchy.level_1.trim() !== '') {
-          // Include leaf records that have level_1 - they will be aggregated by level_1 in chart preparation
-          // But we need to mark them somehow or handle in chart data prep
+          // Allow record at level 2 (aggregated parent OR leaf at level 2)
         } else {
           return false
         }
@@ -366,46 +363,26 @@ export function filterData(
       const isExplicitlySelectedSegment = selectedLevel1Segments.includes(record.segment)
 
       if (record.is_aggregated === true) {
-        // For aggregated records:
-        // 1. If this record's segment is explicitly selected by the user, INCLUDE it
-        //    (This handles the case where user selects Level 1 segments like "By Saturation", "By Structure")
-        // 2. If user selected OTHER segments (parent segments), exclude aggregated records to show leaf sub-segments
-        // 3. If it's NOT a regional segment type without filter: exclude to prevent double-counting
-
+        // Aggregated (parent) records contain totals that overlap with their children.
+        // To prevent double-counting:
+        // - If user explicitly selected THIS segment, INCLUDE the parent total
+        //   (children will be excluded below)
+        // - Otherwise, exclude aggregated records
         if (isExplicitlySelectedSegment) {
-          // User explicitly selected THIS segment - include it
-          // This allows showing Level 1 segments when multiple are selected
-          console.log('🔍 Including explicitly selected aggregated segment:', record.segment)
-          // Allow through - don't return false
-        } else if (hasSegmentFilter) {
-          // User selected OTHER segments - exclude aggregated records, show leaf sub-segments only
-          return false
+          // User selected this exact parent segment - show its total
+          // Allow through
         } else if (!isRegionalSegmentType) {
-          // Non-regional segment types without filter: exclude aggregated to prevent double-counting
           return false
         }
-        // Regional segment type without filter: allow aggregated records through
       } else {
-        // This is a leaf record
-        // If segments are selected and this leaf's parent segment is selected,
-        // include the leaf record (the segment filter will check hierarchy matching)
-        // (The segment filter already checks hierarchy, so it will match correctly)
-
-        // However, if the user explicitly selected Level 1 segments (aggregated),
-        // we should NOT include leaf records that belong to other segments
-        // This prevents mixing aggregated Level 1 segments with their unrelated leaf children
+        // Leaf record - include it unless its parent is already included as an aggregated record
         if (selectedLevel1Segments.length > 0) {
-          // SPECIAL CASE: For regional segment types ("By Region", "By State", "By Country"),
-          // the selected "segment" could be a geography name (North America) or a country name (U.S.)
           if (isRegionalSegmentType) {
             const regionalGeographies = ['North America', 'Europe', 'Asia Pacific', 'Latin America', 'Middle East', 'Africa', 'Middle East & Africa', 'ASEAN', 'SAARC Region', 'CIS Region', 'Global']
-
-            // Check if selected segments are geography names or country/segment names
             const selectedAreGeographies = selectedLevel1Segments.some(seg => regionalGeographies.includes(seg))
             const selectedAreSegments = selectedLevel1Segments.some(seg => !regionalGeographies.includes(seg))
 
             if (selectedAreGeographies && !selectedAreSegments) {
-              // All selections are geography names - match by geography
               const belongsToSelectedGeography = selectedLevel1Segments.some(selectedSeg =>
                 record.geography === selectedSeg
               )
@@ -413,7 +390,6 @@ export function filterData(
                 return false
               }
             } else {
-              // Selections include country/segment names - match by segment
               const belongsToSelectedSegment = selectedLevel1Segments.some(selectedSeg =>
                 record.segment === selectedSeg
               )
@@ -422,8 +398,19 @@ export function filterData(
               }
             }
           } else {
-            // Check if this leaf record belongs to one of the selected Level 1 segments
+            // Check if this leaf's parent is one of the explicitly selected segments
+            // If so, the aggregated parent record is already included - skip the leaf to avoid double-counting
             const hierarchy = record.segment_hierarchy
+            const parentIsSelected = selectedLevel1Segments.some(selectedSeg =>
+              hierarchy.level_1 === selectedSeg
+            )
+
+            if (parentIsSelected) {
+              // Parent aggregated record is already included - exclude this leaf child
+              return false
+            }
+
+            // For other cases, check if this leaf belongs to any selected segment
             const belongsToSelectedSegment = selectedLevel1Segments.some(selectedSeg =>
               hierarchy.level_1 === selectedSeg ||
               hierarchy.level_2 === selectedSeg ||
@@ -431,7 +418,6 @@ export function filterData(
             )
 
             if (!belongsToSelectedSegment) {
-              // This leaf doesn't belong to any selected segment - exclude it
               return false
             }
           }
