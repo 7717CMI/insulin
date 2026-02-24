@@ -1340,12 +1340,31 @@ export async function processJsonDataAsync(
     segmentTypes.delete('By Country')
     console.log(`Segment types after removing geography types:`, Array.from(segmentTypes))
 
+    // Filter out geographies that only exist in segmentation structure but have no actual data
+    // in value/volume files (e.g., "Global" when only region/country-level data exists)
+    const geographiesWithData = new Set<string>()
+    if (valueData) {
+      Object.keys(valueData).forEach(g => geographiesWithData.add(g))
+    }
+    if (volumeData) {
+      Object.keys(volumeData).forEach(g => geographiesWithData.add(g))
+    }
+
+    // Remove geographies from the list if they have no value/volume data
+    // But keep them if they are regions or countries (which get data from "By Region" processing)
+    const filteredGeographies = geographies.filter(g => {
+      // Always keep regions and countries (they have data under parent geographies)
+      if (regionGeographies.includes(g) || allCountries.includes(g)) return true
+      // For top-level geographies (like "Global"), only keep if they have actual data
+      return geographiesWithData.has(g)
+    })
+
     // Build geography dimension with full hierarchy
     const geographyDimension: GeographyDimension = {
-      global: geographies.filter(g => !regionGeographies.includes(g) && !allCountries.includes(g)),
+      global: filteredGeographies.filter(g => !regionGeographies.includes(g) && !allCountries.includes(g)),
       regions: regionGeographies,
       countries: regionToCountries,
-      all_geographies: geographies // Global + regions + countries
+      all_geographies: filteredGeographies
     }
 
     console.log(`Geography dimension built with ${geographies.length} geographies:`, geographies)
@@ -1453,7 +1472,7 @@ export async function processJsonDataAsync(
     
     // Build metadata
     const metadata: Metadata = {
-      market_name: 'Solar Micro Inverter Market',
+      market_name: 'Insulin Glargine Market',
       market_type: 'Market Analysis',
       industry: 'Energy & Power',
       years: allYears,

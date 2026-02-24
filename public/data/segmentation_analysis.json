@@ -1,24 +1,42 @@
 {
   "Global": {
-    "By Technology": {
-      "Single-Phase Micro Inverters": {},
-      "Three-Phase Micro Inverters": {}
+    "By Product Category": {
+      "Originator Molecule": {
+        "Lantus": {},
+        "Toujeo": {}
+      },
+      "Biosimilar": {
+        "Basaglar/Abasaglar": {},
+        "Basalin": {},
+        "Glaritus": {},
+        "Besugine": {},
+        "Other Pipeline Molecules (Ondibta, among others)": {}
+      },
+      "Combination": {
+        "Soliqua": {}
+      },
+      "Interchangeable": {
+        "Semglee": {},
+        "Rezvoglar": {}
+      }
     },
-    "By Power Rating": {
-      "<250 W": {},
-      "250 W - 500 W": {},
-      ">500 W": {}
+    "By Form": {
+      "Vials": {},
+      "Cartridge": {},
+      "Prefilled Pen": {}
     },
-    "By Provider": {
-      "Direct Sales through OEM": {},
-      "Distributors and Wholesalers": {},
-      "Retailers": {},
-      "Solar Installers and Contractors": {}
+    "By Concentration": {
+      "100 IU": {},
+      "300 IU": {}
     },
-    "By End-User": {
-      "Residential": {},
-      "Commercial and Industrial": {},
-      "Utility-scale": {}
+    "By Application": {
+      "Type 1 Diabetes": {},
+      "Type 2 Diabetes": {}
+    },
+    "By Distribution Channel": {
+      "Hospital Pharmacies": {},
+      "Retail Pharmacies": {},
+      "Online Pharmacies": {}
     },
     "By Region": {
       "North America": {
